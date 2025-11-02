@@ -37,10 +37,11 @@ def obtener_catalogo():
     return titulos
 
 # Agregar titulo
-def agregar_titulo(nuevo_titulo):
+def agregar_titulos(nuevo_titulo):
     with open(NOMBRE_ARCHIVO, 'a', newline="", encoding="utf-8") as archivo:
         escritor = csv.DictWriter(archivo, fieldnames=["titulo","cantidad"])
         escritor.writerow(nuevo_titulo)
+        
 
 # Guardar item
 def guardar_item(titulos):
@@ -84,39 +85,45 @@ def validar_catalogo():
 
 
 
-
-
 # Funciones de menu
 
 # Ingresar titulos
+
 def ingresar_titulos():
-    print("---Ingresar Titulo---")
-    nuevo_titulo = input("Ingrese el nuevo título: ").upper().strip()
-
-    if existe_titulo(nuevo_titulo):
-        print("El titulo ya existe")
-        return
     
-    # Validar vacio
-    if not validar_vacio(nuevo_titulo):
-        print("El titulo ingresado no es valido")
-        return
+    while True:
+        print("---Ingresar Titulo---")
+        nuevo_titulo = input("Ingrese el nuevo título: ").upper().strip()
 
-    cantidad = input("Ingrese la cantidad de ejemplares: ").strip()
-    
-    # Validad cantidad
-    if not validar_numero(cantidad):
-        print("La cantidad ingresada no es valida")
-        return
-    
-    cantidad = int(cantidad)
+        if existe_titulo(nuevo_titulo):
+            print("El titulo ya existe")
+            continue
+        
+        # Validar vacio
+        if not validar_vacio(nuevo_titulo):
+            print("El titulo ingresado no es valido")
+            continue
+
+        cantidad = input("Ingrese la cantidad de ejemplares: ").strip()
+        
+        # Validad cantidad
+        if not validar_numero(cantidad):
+            print("La cantidad ingresada no es valida")
+            continue
+        
+        cantidad = int(cantidad)
 
 
-    # Funcion para agregar el producto
-    agregar_titulo({'titulo': nuevo_titulo, 'cantidad': cantidad})
-    print("Se agrego correctamente el nuevo titulo")
+        # Funcion para agregar el titulo
+        agregar_titulos({'titulo': nuevo_titulo, 'cantidad': cantidad})
+        print("Se agrego correctamente el nuevo titulo")
 
-    
+        
+        opcion = input("¿Desea seguir agregando libros al catálogo? (Si/No): ").strip().lower()
+        if not opcion == 'si' or opcion == 's':
+            break
+        
+
 
 # Ingresar ejemplares
 def ingresar_ejemplares():
@@ -166,19 +173,110 @@ def mostrar_catalogo():
 
 # Consultar disponibilidad
 def consultar_disponibilidad():
-    pass
+    titulos = obtener_catalogo()
+
+    # Validar lista
+    validar_catalogo()
+
+    # Pedir titulo a buscar
+    buscar_titulo = input("Ingrese el nombre del titulo que desea buscar: ")
+   
+    # Chequear si tenemos ese titulo
+    encontrado = False
+    for titulo in titulos:
+
+        if titulo["titulo"].lower() == buscar_titulo.strip().lower():
+            print(f"Titulo {buscar_titulo} encontrado, tenemos {titulo['cantidad']} ejemplares disponibles")
+            encontrado = True
+            break
+    if not encontrado:
+        print("No poseemos ese titulo en nuestro catalogo")
+        
 
 # Listar agotados
 def listar_agotados():
-    pass
+    # Obtener catalogo
+    titulos = obtener_catalogo()
+
+    # Lista de agotados
+    agotados = []
+    
+
+    for titulo in titulos: 
+        if titulo['cantidad'] == 0:
+            agotados.append(titulo)
+
+    if  agotados:
+        for titulo in agotados:
+             print(f"TITULO: {titulo['titulo']} - CANTIDAD: {titulo['cantidad']}. El título se encuentra momentáneamente fuera de stock")
+
+    else:    
+        print("No poseemos titulos fuera de stock")
+        
+
 
 # Agregar titulo
-#def agregar_titulo():
- #   pass
+
+def agregar_titulo():
+
+        print("---Ingresar Titulo---")
+        nuevo_titulo = input("Ingrese el nuevo título: ").upper().strip()
+
+        if existe_titulo(nuevo_titulo):
+            print("El titulo ya existe")
+            return
+        
+        # Validar vacio
+        if not validar_vacio(nuevo_titulo):
+            print("El titulo ingresado no es valido")
+            return
+
+        cantidad = input("Ingrese la cantidad de ejemplares: ").strip()
+        
+        # Validad cantidad
+        if not validar_numero(cantidad):
+            print("La cantidad ingresada no es valida")
+            return
+        
+        cantidad = int(cantidad)  
+
+         # Funcion para agregar el titulo
+        agregar_titulos({'titulo': nuevo_titulo, 'cantidad': cantidad})
+        print("Se agrego correctamente el nuevo titulo")
+
 
 # Actualizar ejemplares
 def actualizar_ejemplares():
-    pass
+    titulos = obtener_catalogo()
+
+    # Validar lista vacia
+    validar_catalogo()
+
+    titulo_input = input("Ingrese el titulo al que desea agregarle o quitarle ejemplares del stock: ").strip()
+    eleccion = input("Que operacion desea hacer (Prestamo/Devolucion): ")
+    
+    # Validacion de titulo vacio
+    if not titulo_input:
+        print("Por favor, ingrese un titulo: ")
+    
+    for item in titulos:
+        
+        if item["titulo"].lower() == titulo_input.lower():
+            if eleccion == 'prestamo':
+                
+                item["cantidad"] -= 1
+                print(f"Se actualizo correctamente el stock al titulo {item['titulo']}, el total ahora es de: {item['cantidad']}") 
+            
+            elif eleccion == 'devolucion':
+                item["cantidad"] += 1
+                print(f"Se actualizo correctamente el stock al titulo {item['titulo']}, el total ahora es de: {item['cantidad']}") 
+            else:
+                print("Opcion no valida")      
+            return 
+
+            
+    else:    
+        print("No se encontro el titulo")
 
 # Muestra el menu
 def mostrar_menu():
@@ -208,16 +306,17 @@ def mostrar_menu():
                 
             case "4":
                 consultar_disponibilidad() 
-                pass
+                
             case "5":
                 listar_agotados() 
-                pass
+                
             case "6": 
-                #agregar_titulo()
-                pass
+                agregar_titulo()
+                
+                
             case "7": 
                 actualizar_ejemplares()
-                pass
+                
             case "8": 
                 break
             case _:
