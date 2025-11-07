@@ -68,6 +68,12 @@ def obtener_datos():
             listado_paises.append({"nombre": fila["nombre"], "poblacion": int(fila["poblacion"]), "superficie": int(fila["superficie"]),"continente": fila["continente"]})
     return listado_paises
 
+# Guardar item
+def guardar_item(paises):
+    with open(NOMBRE_ARCHIVO, 'w', newline="", encoding="utf-8") as archivo:
+        escritor = csv.DictWriter(archivo, fieldnames=["nombre","poblacion","superficie","continente"])
+        escritor.writeheader()
+        escritor.writerows(paises)
 
 # Agregar_nuevo_pais
 def agregar_nuevo_pais(nuevo_pais):
@@ -116,7 +122,68 @@ def mostrar_lista_completa():
     for pais in paises:
         print(f"PAIS: {pais['nombre'].upper()} - POBLACION: {pais['poblacion']} - SUPERFICIE: {pais['superficie']} - CONTINENTE: {pais['continente'].upper()}")
 
+# Actualizar datos poblacion
+def actualizar_poblacion():
+    # Obtenemos la los datos
+    paises = obtener_datos()
+    # Validar lista vacia
+    validar_datos()
 
+    # Pedir datos al usuario
+    pais = input("Ingrese el nombre del pais: ").strip()
+
+    # Validad input vacio
+    if not pais:
+        print("Por favor, ingrese un pais")
+    
+    # actualizamos datos
+    encontrado = False
+    for item in paises:
+        if item['nombre'].lower() == pais.lower():
+            poblacion = input("Ingrese la poblacion: ").strip()
+            encontrado = True
+            if not validar_numero(poblacion):
+                print("Datos ingresados invalidos")
+                return
+            poblacion = int(poblacion)
+            item['poblacion'] = poblacion
+            guardar_item(paises)
+
+            print(f"Se actualizo correctamente la poblacion de {pais}, ahora es de: {poblacion}")
+    if not encontrado:
+        print("No se encuentra el pais en la lista\n")
+# Actualizar datos superficie
+def actualizar_superficie():
+    # Obtenemos la los datos
+    paises = obtener_datos()
+    # Validar lista vacia
+    validar_datos()
+
+    # Pedir datos al usuario
+    pais = input("Ingrese el nombre del pais: ").strip()
+
+    # Validad input vacio
+    if not pais:
+        print("Por favor, ingrese un pais")
+    
+    # actualizamos datos
+    encontrado = False
+    for item in paises:
+        if item['nombre'].lower() == pais.lower():
+            superficie = input("Ingrese la superficie: ").strip()
+            encontrado = True
+            if not validar_numero(superficie):
+                print("Datos ingresados invalidos")
+                return
+            superficie = int(superficie)
+            item['superficie'] = superficie
+            guardar_item(paises)
+
+            print(f"Se actualizo correctamente la poblacion de {pais}, ahora es de: {superficie}")
+    if not encontrado:
+        print("No se encuentra el pais en la lista\n")
+
+##############################################
 
 # Funciones del menu
 
@@ -202,9 +269,9 @@ def mostrar_submenu_actualizar():
 
         match opcion:
             case '1':
-                pass
+                actualizar_poblacion()
             case '2':
-                pass
+                actualizar_superficie()
             case '3':
                 break
             case _:
