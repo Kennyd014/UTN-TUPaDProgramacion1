@@ -152,6 +152,7 @@ def actualizar_poblacion():
             print(f"Se actualizo correctamente la poblacion de {pais}, ahora es de: {poblacion}")
     if not encontrado:
         print("No se encuentra el pais en la lista\n")
+
 # Actualizar datos superficie
 def actualizar_superficie():
     # Obtenemos la los datos
@@ -182,6 +183,87 @@ def actualizar_superficie():
             print(f"Se actualizo correctamente la poblacion de {pais}, ahora es de: {superficie}")
     if not encontrado:
         print("No se encuentra el pais en la lista\n")
+
+# Filtrar por continente
+def filtrar_continente():
+    paises = obtener_datos()
+
+    # Validacion de lista vacia
+    validar_datos()
+    #Pedir datos al usuario
+    continente = input("Ingrese el continente: ").strip()
+    print("---Listado de paises---") 
+    encontrado = False   
+    for pais in paises:
+        if pais['continente'].lower() == continente.lower():
+            encontrado = True
+            print(f"PAIS: {pais['nombre'].upper()} - POBLACION: {pais['poblacion']} - SUPERFICIE: {pais['superficie']} - CONTINENTE: {pais['continente'].upper()}")
+    if not encontrado:
+        print("No hay ningun pais perteneciente a ese continente\n")
+
+# Filtrar por rango de poblacion
+def rango_poblacion():
+    paises = obtener_datos()
+
+    # Validacion de lista vacia
+    validar_datos()
+    #Pedir datos al usuario
+    rango_min = input("Ingrese el rango minimo de poblacion: ").strip()
+    rango_max = input("Ingrese el rango maximo de poblacion: ").strip()
+     # Validacion de numeros
+    if not validar_numero(rango_min):
+        print("Datos ingresados invalidos")
+        return
+    if not validar_numero(rango_max):
+        print("Datos ingresados invalidos")
+        return
+    rango_min = int(rango_min)
+    rango_max = int(rango_max)
+    print()
+    print("---Listado de paises---") 
+    encontrado = False   
+    for pais in paises:
+        if rango_min <= pais['poblacion'] <= rango_max:
+            encontrado = True
+            print(f"PAIS: {pais['nombre'].upper()} - POBLACION: {pais['poblacion']} - SUPERFICIE: {pais['superficie']} - CONTINENTE: {pais['continente'].upper()}")
+    if not encontrado:
+        print("No hay ningun pais perteneciente a ese rango\n")
+
+# Filtrar por rango de superficie
+def rango_superficie():
+    paises = obtener_datos()
+
+    # Validacion de lista vacia
+    validar_datos()
+    #Pedir datos al usuario
+    rango_min = input("Ingrese el rango minimo de superficie: ").strip()
+    rango_max = input("Ingrese el rango maximo de superficie: ").strip()
+     # Validacion de numeros
+    if not validar_numero(rango_min):
+        print("Datos ingresados invalidos")
+        return
+    if not validar_numero(rango_max):
+        print("Datos ingresados invalidos")
+        return
+    rango_min = int(rango_min)
+    rango_max = int(rango_max)
+    print("---Listado de paises---") 
+    encontrado = False   
+    for pais in paises:
+        if rango_min <= pais['superficie'] <= rango_max:
+            encontrado = True
+            print(f"PAIS: {pais['nombre'].upper()} - POBLACION: {pais['poblacion']} - SUPERFICIE: {pais['superficie']} - CONTINENTE: {pais['continente'].upper()}")
+    if not encontrado:
+        print("No hay ningun pais perteneciente a ese rango\n")
+
+
+
+
+
+
+
+
+
 
 ##############################################
 
@@ -227,14 +309,34 @@ def agregar_pais():
        break
 
 
-
 # Actualizar datos
 def actualizar_datos():
     mostrar_submenu_actualizar()
 
 # Buscar pais
 def buscar_pais():
-    pass
+    # Obtenemos la los datos
+    paises = obtener_datos()
+    # Validar lista vacia
+    validar_datos()
+
+    # Pedir datos al usuario
+    pais = input("Ingrese el nombre del pais: ").strip()
+
+    # Validad input vacio
+    if not pais:
+        print("Por favor, ingrese un pais")
+    
+    # actualizamos datos
+    encontrado = False
+    for item in paises:
+        if pais in item['nombre']:
+            encontrado = True
+            print(f"Pais: {item['nombre']} - Poblacion: {item['poblacion']} - Superficie: {item['superficie']} - Continente: {item['continente']}")
+
+            
+    if not encontrado:
+        print("No se encuentra el pais en la lista\n")
 
 # Mostrar lista
 def mostrar_lista():
@@ -282,7 +384,7 @@ def mostrar_submenu_actualizar():
 # Mostrar submenu listado
 def mostrar_submenu_listado():
      while True:
-
+        print()
         for seleccion in sub_menu_listado:
             print(seleccion)
         
@@ -297,11 +399,11 @@ def mostrar_submenu_listado():
             case '1':
                 mostrar_lista_completa()
             case '2':
-                pass
+                filtrar_continente()
             case '3':
-                pass
+                rango_poblacion()
             case '4':
-                pass
+                rango_superficie()
             case '5':
                 break
             case _:
@@ -389,7 +491,7 @@ def mostrar_menu():
                 
             case '3':
                 buscar_pais()
-                pass
+                
             case '4':
                 mostrar_lista()
                 
