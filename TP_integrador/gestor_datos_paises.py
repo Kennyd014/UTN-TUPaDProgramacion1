@@ -256,14 +256,113 @@ def rango_superficie():
     if not encontrado:
         print("No hay ningun pais perteneciente a ese rango\n")
 
+# Ordenar por nombre
+def ordenar_nombre():
+    paises = obtener_datos()
+    
+ #  Alternativa sin lambda ni funciones definidas:
+    for i in range(len(paises)):
+        for j in range(i + 1, len(paises)):
+            if paises[i]['nombre'] > paises[j]['nombre']:
+                paises[i], paises[j] = paises[j], paises[i]
+
+    # Mostrar resultados
+    for pais in paises:
+        print(pais['nombre'], pais['poblacion'], pais['superficie'], pais['continente'])
+
+# Ordenar por poblacion
+def ordenar_poblacion():
+    paises = obtener_datos()
+    
+    for i in range(len(paises)):
+        for j in range(i + 1, len(paises)):
+            if paises[i]['poblacion'] > paises[j]['poblacion']:
+                paises[i], paises[j] = paises[j], paises[i]
+
+    # Mostrar resultados
+    for pais in paises:
+        print(pais['nombre'], pais['poblacion'], pais['superficie'], pais['continente'])
+
+# Ordenar por superficie
+def ordenar_superficie():
+    paises = obtener_datos()
+    opcion = input("Desea ordenarlos de forma ascendente? (Si/No): ").strip().lower()
+    print()
+
+    if opcion == 'si' or opcion == 's':
+        for i in range(len(paises)):
+            for j in range(i + 1, len(paises)):
+                if paises[i]['superficie'] > paises[j]['superficie']:
+                    paises[i], paises[j] = paises[j], paises[i]
+
+    else:
+        for i in range(len(paises)):
+            for j in range(i + 1, len(paises)):
+                if paises[i]['superficie'] < paises[j]['superficie']:
+                    paises[i], paises[j] = paises[j], paises[i]
 
 
+    # Mostrar resultados
+    for pais in paises:
+        print(pais['nombre'], pais['poblacion'], pais['superficie'], pais['continente'])
 
+# Pais con mayor y menor poblacion
+def mayor_menor_poblacion():
+    paises = obtener_datos()
+    mayor_poblacion = None
+    menor_poblacion = None
+    min_valor = -1
+    max_valor = 999999999999999999
+    for pais in paises:
+        poblacion = pais['poblacion']
+        if poblacion > min_valor:
+            min_valor = poblacion
+            mayor_poblacion = pais
+        if poblacion < max_valor:
+            max_valor =  poblacion
+            menor_poblacion = pais
+    print(f"El pais con menor poblacion es: {menor_poblacion['nombre'].upper()} con una poblacion de {menor_poblacion['poblacion']}")
+    print(f"El pais con mayor poblacion es: {mayor_poblacion['nombre'].upper()} con una poblacion de {mayor_poblacion['poblacion']}")
 
+# Promedio de poblacion
+def promedio_poblacion():
+    paises = obtener_datos()
+    suma_poblacion = 0
+    promedio_poblacion = 0
+    for pais in paises:
+        suma_poblacion += pais['poblacion']
+    
+    promedio_poblacion = suma_poblacion / len(paises)
 
+    print(f"El promedio de la poblacion en de: {promedio_poblacion}")
 
+# Promedio de superficie
+def promedio_superficie():
+    paises = obtener_datos()
+    suma_superficie = 0
+    promedio_superficie = 0
+    for pais in paises:
+        suma_superficie += pais['superficie']
+    
+    promedio_superficie = suma_superficie / len(paises)
 
+    print(f"El promedio de la poblacion en de: {promedio_superficie}")
 
+# Cantidad de paises por continente
+def cantidad_paises():
+    paises = obtener_datos()
+    continentes = {}
+    for pais in paises:
+        continente = pais['continente']
+
+        if continente in continentes:
+
+            continentes[continente] += 1
+        else:
+            continentes[continente] = 1
+    
+    for continente, cantidad in continentes.items():
+        print(f"{continente.upper()}: {cantidad} pais/paises")
 
 ##############################################
 
@@ -352,7 +451,6 @@ def mostrar_estadistica():
 
 
 
-
 # Funciones sub menu
 
 # Mostrar submenu actualizar
@@ -378,7 +476,7 @@ def mostrar_submenu_actualizar():
                 break
             case _:
                 print("Opción no válida")
-
+        print()
 
 
 # Mostrar submenu listado
@@ -408,6 +506,7 @@ def mostrar_submenu_listado():
                 break
             case _:
                 print("Opción no válida")
+        print()
 
 # Mostrar submenu ordenamiento
 def mostrar_submenu_ordenamiento():
@@ -425,15 +524,16 @@ def mostrar_submenu_ordenamiento():
 
         match opcion:
             case '1':
-                pass
+                ordenar_nombre()
             case '2':
-                pass
+                ordenar_poblacion()
             case '3':
-                pass
+                ordenar_superficie()
             case '4':
                 break
             case _:
                 print("Opción no válida")
+        print()
 
 # Mostrar submenu estadistica
 def mostrar_submenu_estadistica():
@@ -451,18 +551,18 @@ def mostrar_submenu_estadistica():
 
         match opcion:
             case '1':
-                pass
+               mayor_menor_poblacion()
             case '2':
-                pass
+                promedio_poblacion()
             case '3':
-                pass
+                promedio_superficie()
             case '4':
-                pass
+                cantidad_paises()
             case '5':
                 break
             case _:
                 print("Opción no válida")
-
+        print()
 
 # Muestra el menu
 def mostrar_menu():
@@ -506,7 +606,7 @@ def mostrar_menu():
                 break
             case _:
                 print("Opción no válida")
-
+        print()
 
 # Programa principal
 mostrar_menu()
