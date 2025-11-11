@@ -3,7 +3,7 @@ import os
 
 NOMBRE_ARCHIVO = "datos_paises.csv"
 
-# Lista para el menu
+# Listas para el menu y los sub-menu
 menu = [
           "1. Agregar nuevo pais",
           "2. Actualizar datos",
